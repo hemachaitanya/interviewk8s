@@ -167,7 +167,8 @@ three types of containers
 
       (release a new version to a subset of users, then proceed to a full rollout)
 
-### (2) recreate:
+### (2) recreate
+:terminate the old version and release the new one
 
 ### (3) ramped: 
  for very older applications ; release a new version on a rolling update fashion, one after the other 
