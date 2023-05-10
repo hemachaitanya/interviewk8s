@@ -13,7 +13,7 @@ Let it be internal or external
 kube-api server exposes functionality over HTTP(s) protocol and provides REST API
 
 ### etcd:
-* This is memory of k8s cluster
+* This is memory of k8s cluster(etcd is stateful means all the information in k8s stored in local)
 
 ### sheduler:
 * Scheduler is responsible for creating k8s objects and scheduling them on right node
@@ -21,6 +21,14 @@ kube-api server exposes functionality over HTTP(s) protocol and provides REST AP
 ### controller:
 * Controller Manger is responsible for maintaining desired state
 * This reconcilation loop that checks for desired state and if it mis matches doing the necessary steps is done by controller
+    ### node controller
+    noiticing and responce when nodes goes down
+    ### replication controller
+        maintaining correct no. of pods in any replication controller manage
+    
+    ### endoint controller
+    populates the endpoint objects
+    
 
 ###         node component
 
@@ -119,7 +127,8 @@ three types of containers
 ###  replication controller: 
 * replication controller depends on labels , these labels are two types 
 
- ###   (1) equality based:(ReplicationController only allows equality based selectors)
+ ###   (1) equality based:
+ (ReplicationController only allows equality based selectors)
 
     Equality- or inequality-based requirements allow filtering by label keys and values. Matching objects must satisfy all of the specified label constraints, though they may have additional labels as well
 
@@ -156,12 +165,20 @@ three types of containers
 ### (1) canary:
       new and old versions are in container , but we have monitoring service  on new version incase new version is working accuratly all old version pods are kill and only new version  pods create orderly
 
+      (release a new version to a subset of users, then proceed to a full rollout)
+
 ### (2) recreate:
 
-### (3) ramped:
+### (3) ramped: 
+ for very older applications ; release a new version on a rolling update fashion, one after the other 
 
 ### (4) blue/green:
+ release a new version alongside the old version then switch traffic
 
-### (5) A/B  tsting:
+### (5) A/B  testing:
+release a new version to a subset of users in a precise way (HTTP headers, cookie, weight, etc.). A/B testing is really a technique for making business decisions based on statistics but we will briefly describe the process
 
-### (6) roolback and rool out:
+
+### (6) roolback and rool out: 
+anycomplexities on new version pod takes old version  is called roolback
+new versiom is called roolout
