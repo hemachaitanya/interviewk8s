@@ -183,3 +183,12 @@ release a new version to a subset of users in a precise way (HTTP headers, cooki
 ### (6) roolback and rool out: 
 anycomplexities on new version pod takes old version  is called roolback
 new versiom is called roolout
+
+### taint & affiniti
+
+pods assigned to the nodes by using sheduler its checks spu,memory,ram ...... some env variables of nodes and pods is called affinity
+ * affinity are two types those are
+                                 (1)pod affinity
+                                 (2)node affinity
+  * taint is opposite of affinity
+    means you want to remove (repulse) pods to node is called taint
