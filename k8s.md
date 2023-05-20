@@ -192,3 +192,165 @@ pods assigned to the nodes by using sheduler its checks spu,memory,ram ...... so
                                  (2)node affinity
   * taint is opposite of affinity
     means you want to remove (repulse) pods to node is called taint
+
+----------------------------
+### Kubernetes api versioning
+
+* To k8s cluster we directly or indirectly using kubectl speak with API Server
+
+* k8s has lot of features underdevelopment, stable, improvements
+
+    There are 3 channels for objects/features
+
+        alpha
+        beta
+        stable
+
+    *  Every thing in k8s is an object.
+        To declare an object, we need to specify 4 fields
+
+    * kind is type of object
+
+    * metadata describes some additional information about object you are trying to create (name, labels)
+
+    * spec: This is the desired state
+
+    * To get all the api-resources in your k8s cluster (kubectl api-resources)
+
+### helm (old version tinnel)
+    disadv: basically 
+    *  helm is a package manager for k8s (like apt is package manager for ununtu)
+
+  * helm is to run dynamic yaml files(ex: echo "hema" = static)
+        ( name=hema ; echo 'welcome $name' = dynamic )
+    # new loadbalancer in every service is a  not good because it is very cost
+    good idea is(ingress controller: controller is third party) use reusable loadbalances or lb work on layer 4 (port and tcp)
+
+    /catalog
+    /log
+    /identity.qt.com
+    no need it we need http/ adress name
+    we need layer 7 (path based / hostname based)
+
+      my company "f5" load balancer big hardware service load balancer
+
+### kustamize 
+
+kustamize is nothing but module
+
+* kustamise also a dynamical yaml approch , it's override approch , kustamize nativelly supports kubectl (latest versions)
+
+ kustumize adv is we directly run from git environment 
+ ![image](./images/5.png)
+ # kubectl apply -k .     (means  kustomize directory)
+
+## interview (q)
+
+helm is package manager in k8s
+y u use this helm
+ helm chat is very easy to deploy by using (helm install<nameof application>)
+
+        helm install [chat] [wr chat present] []
+
+### patching
+ patching means changing
+ i have a  patch for service 
+ type will be change in port
+ type will be change in loadbalanceer
+------------------------------
+build image code
+terraform apply
+
+kms(aws)
+key valut (azure)
+hashi crop vault
+
+
+most common failures in k8s
+-----------------------------------------------------------------------
+### deamon set
+*  we want to attach pod to every node beacause of metrics , logs , and monitoring , fileagent purpose 
+* DaemonSet is a controller which creates pod on every/selected nodes in k8s cluster
+Use cases:
+   *  log collectors
+   *  agents etc
+
+![image](./images/6.png)
+
+### affinity/anti affinity:
+* Schedule a Pod using preferred node affinity
+
+*  how to assign a Kubernetes Pod to a particular node using Node Affinity in a Kubernetes cluster.
+
+        kubectl get nodes --show-labels
+* nodeAffinity: Describes node affinity scheduling rules for the pod.
+
+* podAffinity: Describes pod affinity scheduling rules (e.g. co-locate this pod in the same node, zone, etc. as some other pod(s)).
+
+* podAntiAffinity: Describes pod anti-affinity scheduling rules (e.g. avoid putting this pod in the same node, zone, etc. as some other pod(s))
+
+### taint and tolarasions:
+taint is cannot assigning(con't working) pods in perticular node 
+
+ taint is node level
+ tolaration is pod level
+
+ #### noshedule: 
+ already executed pods will be running . but new pods can't attached
+ #### prefer noshedule:
+ which must be of effect NoExecute, otherwise this field is ignored
+ #### evict(no execute):
+ delete all the pods previously created in the node 
+
+
+    kubectl taint nodes node1 key1=value1:NoSchedule
+
+### node selector
+
+When we have tried to create a pod with nodeSelector matching purpose: poc it was created on node 0 and when we created a pod with purpose:
+ testing it created in node 1 and when created a pod with purpose: 
+ development it was in pending state (not created)
+
+* ### service:
+* services are two types 
+(1)internal service : cluster ip
+(2)external service : node port , load balancer
+
+* When upgrading to newer versions of Pods ensure right set of labels are present on k8s service selector
+
+
+### headless services:
+ * Headless service will not have cluster ip
+ * Headless service returns the ips of the pods returned by selector.
+ * This is used in stateful sets
+
+ ### stateful set: 
+
+ Statefulset is like deployment with replicas. But each pod gets its own volume.
+ When we create replicas in Stateful Set we get predictable names
+  We can access individual pod, by creating headless service and by using ...svc.cluster.local
+ 
+
+
+  load balancer sends traffic into main pod after that creating pod pods maintainerssame data in mainpod copied into the remaining pods .
+
+ ### stateless service:
+
+ load balancer send traffic into the  differend pods wich one have less traffic deals
+
+ ### volumes
+
+ Volume represents a named volume in a pod that may be accessed by any container in the pod.
+
+  it is temporarystorage we delete pod storage of data(information) also deleted
+
+  ### ephermal volume:
+ ### config:
+ ### secret: 
+  ### ephermal:
+  ### persisted: 
+  when we delete  pods then data also deleted 
+
+  persisted volumes have storage clasess
+  these storage classes are used for communicate with cluster storages (in aws ecs)
+

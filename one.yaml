@@ -1,0 +1,138 @@
+### Activity 1 : Let me write a simple pod with one nginx container
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: first-task
+spec:
+  containers: 
+    - name: nginx
+      image: nginx:1.23
+      command: 
+        - sleep
+      args: 
+        - 1d
+### Activity 2: Lets write a simple pod spec/manifest to run jenkins as well as nginx containers in one pod
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.23
+      ports:
+        - containerPort: 80
+          protocol: TCP
+    - name: jenkins
+      image: jenkins/jenkins:lts-jdk11
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+### Activity 3: Write a k8s pod manifest to run one container with alpine with cmd sleep 1d (docker container run -d alpine sleep 1d)
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: alpine
+spec:
+  containers:
+    - name: alpine
+      image: alpine
+      command: 
+        - sleep
+      args:
+        - 1d
+###  write service file for loadbalancer of nginx servicce
+# mkdir base
+### diployment.yaml ; hpa.yaml ; service.yaml ; kustamization.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-svc
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80 
+      protocol: TCP
+      targetPort: 80
+  type: LoadBalancer
+---
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: kustumize
+  app: nginx
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: rollingUpdate
+    rollingUpdate:
+      maxSurge: 1  ### (% also we mention)
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      app: nginx
+    spec:
+      activeDeadlineSeconds: 5
+      containers:
+        - name: nginx
+          image: nginx:1.23
+          ports:
+            - containerPort: 80
+              protocol: TCP
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: horizantalscalling
+spec:
+  maxReplicas: 5
+  minReplicas: 2
+  scaleTargetRef:
+  # apiVersion: autoscaling/v1
+    kind: Deployment
+    name: dashboard-deploy
+  targetCPUUtilizationPercentage: 70
+---
+apiVersion: v1
+kind: namespace
+metadata:
+  name: namespace
+spec:
+  
+#### kustomization.yaml
+---
+resources:
+  namespace.yaml
+  deployment.yaml
+  service.yaml
+  hpa.yaml
+###  mkdir overlays(env)
+qa folder
+uat folder 
+dev 
+    # kustomization.yaml
+---
+base:
+
+
+### namespace ex: yaml in google
+# namespace transformer
+( )
+
+
+
+    
+
+
+
+  
