@@ -202,9 +202,11 @@ pods assigned to the nodes by using sheduler its checks spu,memory,ram ...... so
 
     There are 3 channels for objects/features
 
-        alpha
-        beta
-        stable
+        alpha : have create community ; for ex: cloude native k8s there might be change in API gateway also but it don't use in production
+
+        beta : after alpha we did not remove that changes in this beta stage , and small changes will occures 
+
+        stable : all features within the API group is specified in a REST path and in the api version serialized object.
 
     *  Every thing in k8s is an object.
         To declare an object, we need to specify 4 fields
