@@ -356,3 +356,18 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
   persisted volumes have storage clasess
   these storage classes are used for communicate with cluster storages (in aws ecs)
 
+
+  # ADOM K8S
+
+  ![hema](./images/A1.png)
+  ![hmea](./images/A2.png)
+  ![lll](./images/A3.png)
+  ![hema](./images/A4.png)
+  ![hema](./images/A5.png)
+  ![hema](./images/A6.png)
+  ![hema](./images/A7.png)
+  ![hema](./images/A8.png)
+  ![hema](./images/A9.png)
+  ![hema](./images/A10.png)
+  ![hema](./images/A11.png)
+  ![hema](./images/A12.png)
