@@ -389,3 +389,94 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
   ![hema](./images/A28.png)
   ![hema](./images/A29.png)
   ![hema](./images/A30.png)
+  
+
+  * PERSISTENT VOLUME (static volume persistence)
+    * because we previously create one volume(EBS)   in  aws cloud
+
+   create one object in ur k8s cluster , in cloud you need to create storage in aws , map that storage into k8s cluster is called prsistent volume. 
+
+   ![hema](./images/A31.png) 
+   ![hema](./images/A32.png)
+   ![hema](./images/A33.png)
+
+
+
+* persistance volume claim: which  is available to match that's the persistent volume
+
+![hema](./images/A34.png)
+
+* persistent volume provisioning
+
+![Alt text](./images/A35.png)
+
+ ### health check
+
+ * application in running but its not working properly we need health check
+ ![aaa](image/A36.png)
+ ![hema](./images/A37.png)
+
+
+## k8s config & secrete
+* k8s me wil write one config file it reads the file and will be store it on a vertual memory , which will come inside the pod.
+
+* The file in which you are sharing some content  which needs to be availabe inside the container  ifthis file containes application detailes file , the file which have configuration details (db details, ) i called configuration map
+
+* the file can have sensitive data is called secrets . 
+* content of ur container you don't have content of the file access it as a environment variable in container .
+![hema](./images/A38.png)
+![hema](./images/A39.png)
+![hema](./images/A40.png)
+* 
+  ## KOPS INSTALLATION 
+
+  * kops means k8s operations , kops is a free and open source command line tool for configuring and maintaining k8s clusters and provisioning the cloud infrastructure needed to maintain them . kops is officially supported and widely used on aws , and is expanding to support multiple additional cloud platforms.
+
+  #### kops prerequisites 
+
+  (1) aws account
+
+  (2) deploy or create one management server which holds all scripts
+
+  (3) s3 bucket
+
+  (4) route 53 domain integration 
+
+  (5) kops binary and kubectl binary
+
+  (6) ssh public and private key
+
+  (7) aws access key and secret key (aws cli for configuring)
+
+  #### kops installation
+  * create one ec2 instance
+  * <https://github.com/kubernetes/kops/releases/download/v1.27.0/kops-linux-amd64>
+  * chmod 700 kops-linux-amd64
+  * mv kops-linux-amd64 kops
+  * mv kops /usr/local/bin/
+  * kops version
+  * <curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.1/2023-04-19/bin/linux/amd64/kubectl>
+  * chmod 700 kubectl
+  * mv  kubectl /usr/local/bin/
+  * ssh-keygen
+  * awscli installation and configuration
+  * kops create cluster --name=<our choice> --state=<bucketname> --zones=<namezone> --node-count=<number> --node-size=<t2....> --master-size=<t2..> --master-volume-size=<our choice> --node-volume-size=<> --dns-zone=<DNS name>
+
+  * kops create cluster --name=sohail666.xyz --state=s3://sohail666.xyz --zones=us-east-1a --node-count=1 --node-size=t2.medium --master-size=t2.medium --master-volume-size 20 --node-volume-size 10 --dns-zone=sohail666.xyz
+  *kops get ig
+   *   kops get ig --state=s3://chaitu.xyz --name=babool.xyz
+   *  kops edit ig <control-plane-ap-south-1a> --state=s3://chaitu.xyz
+   *  kops edit ig nodes-ap-south-1a --state=s3://chaitu.xyz
+   *  kops update cluster --state=s3://chaitu.xyz --yes 
+   * kops update cluster  --name=<our choice> --state=<bucketname> --yes
+   * kops get cluster --state=<statefilename(bucket name)>
+   * kops delete cluster --state=<statefile> --name=<clustername> --yes
+  
+
+
+  
+
+
+  ### kube spray 
+  * kubespray is a composition of ansibe playbooks , inventory , provisioning tools and domain knowledge for generic OS or k8s clusters configuration management tasks 
+
