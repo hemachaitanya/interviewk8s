@@ -4,6 +4,13 @@
  is an open source system to deploy, scale, and manage containerized applications anywhere
 
 ### container orchistration
+
+#### quoram:
+   
+
+   the minimum number of memebers in assembly or society 
+        that must be present at any of that meeeting to make the proceding of that meeting valid.
+        
          
 ###         master component
 
@@ -479,4 +486,36 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
 
   ### kube spray 
   * kubespray is a composition of ansibe playbooks , inventory , provisioning tools and domain knowledge for generic OS or k8s clusters configuration management tasks 
+
+  ### k8s errors:
+
+  ##  (1) image pull backoff , ErrImagePull
+   
+   * wrong container image (path by mistake)
+   * trying to use private images with out providing regstry credentials (like ecr with out credentials )
+   * image does not exists
+
+## (2) crashloop back off
+   
+   * in single pod  multiple containers are presented , in that two containers have running application in same port (httpd , nginx) then crash loop backoff error will be occures
+
+   * when you are launching a new application on k8s having the application crash on startup is a common occurence .
+   * we can see that application exit code is 1 , we might also see an OOMKilled error (first thing we can do is check our application logs (kubectl logs <pod name>))
+
+## (3)  run container error
+
+     * Missing ConfigMap or Secret
+
+     * Kubernetes best practices recommend passing application run-time configuration via ConfigMaps or Secrets. This data could include database credentials, API endpoints, or other configuration flags.
+
+    * A common mistake that I've seen developers make is to create Deployments that reference properties of ConfigMaps or Secrets that don't exist or even non-existent ConfigMaps/Secrets. 
+## (4)  if we  are unable to  delete pods for any reason
+
+   *  for every pod  we have some finalizers , so we should un-comment  and then delete the pod .
+
+
+
+
+   
+
 
