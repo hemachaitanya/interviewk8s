@@ -434,6 +434,24 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
 ![hema](./images/A38.png)
 ![hema](./images/A39.png)
 ![hema](./images/A40.png)
+![hema](./images/A44.png)
+```yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 1GB
+  accessModes: 
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle 
+  awsElasticBlockStore:
+    volumeID: <instance volume id>
+    
+    
+```
 * 
   ## KOPS INSTALLATION 
 
