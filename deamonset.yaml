@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hema
+  labels: 
+    env: prod
+spec:
+  minReadySeconds: 5
+  selector: 
+    matchLabels:
+      name: hema
+      env: prod
+  template:
+    metadata:
+      name: hema
+      labels:
+        env: prod
+        name: hema
+    spec:
+      containers:
+        - name: hema
+          image: caddy
+          ports:
+            - name: hema
+              containerPort: 80
+              protocol: TCP
+
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: caddy-svc
+  labels:
+    env: prod
+spec:
+  selector:
+     name: hema
+     env: prod 
+  ports:
+  - name: hema
+    protocol: TCP
+    targetPort: 80
+    port: 80 
+  
+    
+
+  
+        
+                  
