@@ -64,9 +64,9 @@
             "properties": {
                 "securityRules": [
                     {
-                        "name": "ssh",
+                        "name": "openssh",
                         "properties": {
-                            "description": "description",
+                            "description": "open ssh port",
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
                             "destinationPortRange": "*",
@@ -78,7 +78,7 @@
                         }
                     },
                     {
-                        "name": "http",
+                        "name": "openhttp",
                         "properties": {
                             "description": "open http inbounds",
                             "protocol": "Tcp",
@@ -87,12 +87,12 @@
                             "sourceAddressPrefix": "*",
                             "destinationAddressPrefix": "*",
                             "access": "Allow",
-                            "priority": 1000,
+                            "priority": 1010,
                             "direction": "Inbound"
                         }
                     },
                     {
-                        "name": "https",
+                        "name": "openhttps",
                         "properties": {
                             "description": "open inbound https roles",
                             "protocol": "Tcp",
