@@ -108,7 +108,7 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks','vertualNetwork1')]"
+                "[resourceId('Microsoft.Network/virtualNetworks','virtualNetwork1')]"
             ]     
         },
 
