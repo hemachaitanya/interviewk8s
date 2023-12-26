@@ -7,7 +7,7 @@
             "metadata": {
                 "description": "description"
             },
-            "defaultValue": "range of entire network"
+            "defaultValue": "192.168.0.0/16"
         },
         "subnet-ranges": {
             "type": "array",
@@ -108,7 +108,7 @@
                 ]
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Network/virtualNetworks','ntier')]"
+                "[resourceId('Microsoft.Network/virtualNetworks','vertualNetwork1')]"
             ]     
         },
 
