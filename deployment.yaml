@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hemachaitu
+  labels: 
+    env: prod
+    organization: qt
+spec:
+  minReadySeconds: 5
+  replicas: 1
+  selector:
+    matchLabels:
+      name: hemachaitu
+      env: prod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+  template:
+    metadata:
+      name: hemachaitu
+      labels: 
+        env: prod
+        name: hemachaitu
+    spec:
+      containers: 
+        - name: hemachaitu
+          image: caddy
+          ports:
+            - name: caddy
+              protocol: TCP
+              containerPort: 80
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: hemachaitu
+  labels:
+    env: prod
+    organization: qt
+spec: 
+  type: LoadBalancer
+  selector:
+    name: hemachaitu
+    env: prod   
+  ports:
+    - name: hemachaitu
+      protocol: TCP
+      targetPort: 80
+      port: 80
