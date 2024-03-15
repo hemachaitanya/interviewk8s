@@ -547,8 +547,226 @@ spec:
    *  for every pod  we have some finalizers , so we should un-comment  and then delete the pod .
 
 
+  ### KUBERNETES
+
+  * kubectl create job  <job name> --image=<image name>
+
+  * kubectl get po
+
+  * kubectl exec -it <pod name> -- /bin/bash
+
+      apt update && apt install net-tols -y
+      ifconfig
+
+  * kubectl create job alpine --image=alpine -- sleep -- 1d
+
+## sidecar - container 
+
+* Sometimes we might need extra functionality to inject log exports, network monitoring, tracing, then we can add one more container as side car in your pod
+
+(1) Write a Manifest for a Pod which runs two containers
+name is first & image is alpine sleep 1d
+name is second & image is ubuntu sleep 1d
+
+*   kubectl exec -it -c <container name> <podname> -- /bin/sh
+
+      #### docker container run --name <identifying name> -d -P <image name>
+
+      #### docker container logs <identifying name>
+
+      ####  docker container run --name <identifyingname> -P -d --cpus="1" --memory 512m <image-name>
+
+### container states in a pod
+
+  * running
+  * terminated
+  * waiting
+### pod states in job
+
+  * pending
+  * runnng
+  * succeded
+  * failed
+  * unknown
+###  Labels && annotations
+
+* kubectl run frontend --image=httpd --restart=Never --labels=env=prod,team=admin
+
+* kubectl run backend --image=httpd --restart=Never --labels=env=prod,app=apache
+
+* kubectl run database --image=httpd --restart=Never --labels=env=prod
+
+* kubectl get po --show-labels
+
+* kubectl describe pods 
+
+*  kubectl label pods backend env-
+
+*  kubectl get pods --show-labels
+
+* kubectl get pods -l 'team in (admin)',env=prod --show-labels
+
+* apt update && apt install tmux -y
 
 
-   
+
+### RBAC (ROLL BASED ACCESS CONTROLE)
+
+*  kubectl auth can-i -h (or) --help
+
+* in k8s we give permissions for NODE authentication , ABAC , RBAC & web hook autharization (permisssions or autheraizations are applicable for users , groups , service account)
+
+* we give access to the team members for operating access . (delete, create , update , patch , list , get ....) this are called VERBS
+
+* above operations applicable for resources (configmaps , pods , secretes , deployment , PV and pvc ....)
+
+* kubectl api-resources
+
+* kubectl create job --image:caddy >> job.yaml
+
+* kubectl create namespace <name> >> ns.yaml
+
+* kubectl get ns
+
+* kubectl congif set-context --current --namespace=<new-namespace>
+
+* kubectl get role
+
+* kubectl get rolebinding
+
+*  mkdir cert
+
+* cd cert
+
+* openssl genrsa -out <name>.key <size> ## size like 2048 ,1024
+
+* openssl req -new -key <name>.key -out <name>.csr -subj "/CN=<name>/O=learning"
+
+* openssl x509 -req -in <name>.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out <name>.crt -days 120
+
+* kubectl config set-credentials <name> --client-certificate=<name>.crt --client-key=<name>.key
+
+* kubectl config set-context <name>-context --cluster=kubernetes --user=<hema>
+
+* kubectl config use-context <name>-context
+
+### create one service account 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: robo
+automountServiceAccountToken: true
+
+### attach service account to pod
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: robotrails
+spec:
+  serviceAccountName: robo
+  containers:
+    - name: nginx
+      image: nginx
+### create a role name as foramlity
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: formality
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - services
+    verbs:
+      - list
+      - get
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - list
+      - get
+      - watch
+
+### create a role binding 
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: formality-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: formality
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: <name>
+  - kind: ServiceAccount
+    name: robo
+
+### Role and RoleBindings apply to a particular namespace
+
+### commands to upgrate kubernetes version from old version to new version
+
+![hema](./images/updateversion.png)
+
+ ## commands to update controle plane
+
+      sudo apt-mark unhold kubelet kubeadm kubectl
+      curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      sudo apt-get update
+      sudo apt-cache madison kubeadm
+      sudo apt-get install kubeadm=1.27.4-1.1 && sudo apt-mark hold kubeadm
+      kubeadm version
+      sudo kubeadm upgrade plan
+      sudo kubeadm upgrade apply v1.27.4
+      kubectl drain ip-172-31-33-86 --ignore-daemonsets
+      sudo apt-m  ark unhold kubelet kubectl && sudo apt-get install -y kubelet=1.27.4-1.1 kubectl=1.27.4-1.1 && sudo apt-mark hold kubelet kubectl
+      sudo systemctl daemon-reload
+      sudo systemctl restart kubelet.service
+      kubectl uncordon ip-172-31-33-86
+      kubectl get nodes
 
 
+## commands to update worker node 
+
+
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.27/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.27/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    sudo apt-get update
+    sudo apt-mark unhold kubelet kubeadm kubectl
+    sudo apt-cache madison kubeadm
+    sudo apt-get install kubeadm=1.27.4-1.1 && sudo apt-mark hold kubeadm
+    sudo kubeadm upgrade node
+    kubectl get nodes
+    kubectl drain ip-172-31-40-43 --ignore-daemonsets
+    sudo apt-mark unhold kubelet kubectl && sudo apt-get install -y kubelet=1.27.4-1.1 kubectl=1.27.4-1.1 && sudo apt-mark hold kubelet kubectl
+    sudo systemctl daemon-reload
+    sudo systemctl restart kubelet.service
+    kubectl uncordon ip-172-31-40-43
+
+
+## NAMESPACE
+
+  * namespace are a way to organize cluster into vertual sub-clusters
+
+  * kubectl create namespace <name>
+
+  * kubectl get --all -namespaces
+
+  * kubectl get pods -n <name-of-namespace>
+
+  * kubens <nammespace-name>
+
+  * 
+      

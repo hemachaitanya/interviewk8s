@@ -8,4 +8,81 @@ tasks:
     name: apache2
     update_cache: true
     state: present
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: twocontainers
+  labels:
+    app: teo
+spec:
+  restartPolicy: Never
+  containers:
+    - name: alpine
+      image: alpine
+      command:
+        - sleep
+          1d
+    - name: ubuntu
+      image: ubuntu:22.04
+      command: 
+        - sleep
+          1d
+---
+apiVersion: batch/v1 
+kind: Job 
+metadata: 
+  name: hema
+  labels:
+    env: test
+    team: admin
+spec: 
+  activeDeadlineSeconds: 5
+  selector:
+    matchLabels:
+      env: test
+      name: hema
+  template:
+    metadata:
+      name: hema
+      labels: 
+        env: test 
+    spec: 
+      restartPolicy: Never
+      containers:
+        - name: jenkins 
+          image: jenkins/jenkins 
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: hema
+          resources:
+            requests:
+              cpu: 0.05
+              memory: 256Mi 
+            limits:
+              cpu: 0.05
+              memory: 512Mi 
+          readinessProbe:
+            initialDelaySeconds: 5
+            exec:
+              command:
+                - systemctl
+                - start
+                - jenkins.service 
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: hema
+  labels:
+    env: test 
+spec:
+  type: LoadBalancer 
+  ports:
+    - targetPort: 8080
+      port: 8080
+      protocol: TCP
+            
+      
     
