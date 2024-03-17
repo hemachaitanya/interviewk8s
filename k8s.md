@@ -766,7 +766,82 @@ subjects:
 
   * kubectl get pods -n <name-of-namespace>
 
-  * kubens <nammespace-name>
+  * kubens <namespace-name>
 
-  * 
+  * kubectl delete pods --all -n <name-of-ns>
+
+  * kubectl config set-context --current --namespace=<name-of-ns>
+
+          current-context   Display the current-context
+
+      delete-cluster    Delete the specified cluster from the kubeconfig
+
+      delete-context    Delete the specified context from the kubeconfig
+
+      delete-user       Delete the specified user from the kubeconfig
+
+      get-clusters      Display clusters defined in the kubeconfig
+
+      get-contexts      Describe one or many contexts
+
+      get-users         Display users defined in the kubeconfig
+
+      rename-context    Rename a context from the kubeconfig file
+
+      set               Set an individual value in a kubeconfig file
+
+      set-cluster       Set a cluster entry in kubeconfig
+
+      set-context       Set a context entry in kubeconfig
+
+      set-credentials   Set a user entry in kubeconfig
+
+      unset             Unset an individual value in a kubeconfig file
+
+      use-context       Set the current-context in a kubeconfig file
       
+      view              Display merged kubeconfig settings or a specified kubeconfig file
+      
+### CNI:
+
+*  K8s dictates the following requirements
+
+    All Pods must communicate with each other without NAT
+
+    Nodes can communicate with Pods without NAT
+
+    Pod ip address is same as those outside the Pods that it sees itself
+
+* With the above constraints we have 4 distinct network problems 
+
+    Container to Container networking
+
+    Pod to Pod Networking
+
+    Pod to Service Networking
+
+    Internet to Service Networking
+
+* (1) container to container networking 
+
+      two pods inside the containers shares the same network  namespace
+
+      * create 2 containers in the one pod and give the names for each containers 
+      
+      * kubectl apply -f <name.yaml>
+
+      * kubectl get po -owide
+
+      * kubectl exec -it <podname> -c <contkubectl exec -it mypod -c container1 -- /bin/bash ainer1-name> -- /bin/bash
+
+      * kubectl get pods mypod -o=jsonpath='{range .status.podIP}{"Container 1 IP: "}{@}{"\n"}{end}'
+
+      * kubectl exec -it <poname> -c <container1-name> -- /bin/sh
+
+      * curl http://<podip>:<port-of container 2>
+
+      
+
+
+    
+
