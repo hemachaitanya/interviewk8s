@@ -840,7 +840,130 @@ subjects:
 
       * curl http://<podip>:<port-of container 2>
 
-      
+### pod to pod communication with in the same node
+
+* kubectl create job <jobname> --image:<image name>
+
+* kubectl get po -owide
+
+* kubectl exec -it <pod-1 name> -- /bin/sh
+
+    * cat /etc/os-release
+
+    * apk update && apk add curl && apk add net-tools
+
+    * ping http://<pod2-ip>:<port> (or) curl http://<pod2-ip>:<port>
+
+### pod to pod communicaion with in same node but different namespaces 
+
+ * 
+
+### pod to pod communication within the different nodes
+
+* service mechanisum who as access the applications inside the pod/containers
+
+![hema](./images/sevice.completek8s.png)
+
+* kubectl get deploy --all-namespaces
+
+* kubectl get pods --all-namespaces
+
+*  kubectl get deploy --all-namespaces
+
+*  kubectl get deployment.apps -n kube-system coredns -o yaml > deploy.yaml
+
+*  kubectl get svc --all-namespaces
+
+![hema](./images/service-completek8s.png)
+
+---yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+spec:
+  selector:
+    app: nginx
+  ports:
+    - name: nginx-svc
+      protocol: TCP
+      port: 80
+---
+
+* kubectl get svc --all-namespaces
+
+* kubectl get endpoints
+
+* kubectl get endpointslices.discovery.k8s.io
+
+![hema](./images/complete8s-svc-3.png)
+
+##### Endpoints help identify what pods are running for the service, Endpoints are created and managed by services
+
+---yaml
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: nginx-svc
+subsets:
+- addresses:
+  - ip: 192.168.0.8
+    nodeName: controlplane
+    targetRef:
+      kind: Pod
+      name: nginx-deployment-cbdccf466-6q5f9
+      namespace: default
+      uid: 9e2da211-7213-40de-921f-7e871690fcac
+  - ip: 192.168.0.9
+    nodeName: node01
+    targetRef:
+      kind: Pod
+      name: nginx-deployment-cbdccf466-kxc47
+      namespace: default
+      uid: 69ea9d52-94fa-4bb9-8650-cddefeb947e8
+  ports:
+  - name: nginx-svc
+    port: 80
+    protocol: TCP
+---
+
+*  kubectl apply -f endpoint.yaml
+
+### There are four types of services
+#### ClusterIP : 
+
+    two pods present in two diffenent nodes for internanally they communicate with each other by using clusteIP 
+
+![hema](./images/completek8s-clusterip.png)
+
+#### NodePort:
+  
+    
+LoadBalancer
+ExternalName
+
+
+
 
 
     
