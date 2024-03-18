@@ -1019,7 +1019,206 @@ externally
 
 ![hema](./images/complete-k8s-ingresss.png)
 
-* 
+### Deployment files
+
+```yaml
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: catalog
+  labels:
+    app: nginx
+    env: uat
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchExpressions:
+      - key: online 
+        operator: In
+        values:
+          - flipkart
+          - amazon
+  template:
+    metadata:
+      labels:
+        online: amazon
+    spec:
+      containers:
+        - name: catalog
+          image: hema789/ingress:catalog
+          imagePullPolicy: IfNotPresent
+          ports: 
+            - containerPort: 80
+              
+---
+apiVersion: v1                 
+kind: Service
+metadata:
+  name: catalog-svc
+spec:
+  type: ClusterIp
+  selector: 
+    online: amazon
+  ports:
+    - port: 80
+      protocol: TCP
+
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: identity
+  labels:
+    app: nginx
+    env: uat
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchExpressions:
+      - key: online 
+        operator: In
+        values:
+          - flipkart
+          - meesho
+  template:
+    metadata:
+      name: identity
+      labels:
+        online: meesho
+    spec:
+      containers:
+        - name: identity
+          image: hema789/ingress:identity
+          ports: 
+            - containerPort: 80
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-svc
+spec:
+  type: LoadBalancer
+  selector: 
+    online: meesho
+  ports:
+    - port: 80
+      protocol: TCP
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: bascket
+  labels:
+    app: nginx
+    env: uat
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  selector:
+    matchExpressions:
+      - key: online 
+        operator: In
+        values:
+          - bascket
+          - amazon
+  template:
+    metadata:
+      name: bascket
+      labels:
+        online: bascket
+    spec:
+      containers:
+        - name: catalog
+          image: hema789/ingress:bascket
+          ports: 
+            - containerPort: 80
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bascket-svc
+spec:
+  type: clusterIp
+  selector: 
+    online: bascket
+  ports:
+    - port: 80
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$
+spec:
+  ingressClassName: nginx
+  rules:
+    - http: 
+        paths:
+          - path: /catalog(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: catalog-svc
+                port:
+                  number: 80
+    - http: 
+        paths:
+          - path: /bascket(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: bascket-svc
+                port:
+                  number: 80
+    - http: 
+        paths:
+          - path: /identity(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service: 
+                name: identity-svc
+                port:
+                  number: 80
+
+---
+kubectl apply -f <ingress.yaml>
+kubectl apply -f <ingress.yaml>
+kubectl describe ingress <ingress_name>
+kubectl describe ingress <ingress_name>
+kubectl edit ingress <ingress_name>
+kubectl get ingress <ingress_name> -o yaml
+
+kubectl logs <ingress_controller_pod_name>
+
+
+
+
+     
+
+      
+```
 
 
 
