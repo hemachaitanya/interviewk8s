@@ -950,17 +950,63 @@ subsets:
 *  kubectl apply -f endpoint.yaml
 
 ### There are four types of services
+
+![hema](./images/servicek8s.png)
+
 #### ClusterIP : 
 
     two pods present in two diffenent nodes for internanally they communicate with each other by using clusteIP 
 
-![hema](./images/completek8s-clusterip.png)
+    cluster ip is used expose internal communicatin purpose , which means with in the k8s cluster you wolud be able to access the pods
+
+* kubectl get svc
+
+* kubectl port-forward service/api-svc 8080:8080
+
+* curl <ipv4>:8080
+
+
+![hema](./images/complete-clusterip.png)
 
 #### NodePort:
+
+* incase you have 10 worker nodes , in 10 nodes same applicaiton will be run in the 10 worker nodes the ips will be different , then we will access the single applications with 10 different ip adresses .
+
+
+![hema](./images/completek8s-clusterip.png)
+
+* node-port type expose to your pod to external network  with the same target port, user can access it using the worker node ip and port  will you exposes.
+
+* user will be access traffic will be send to the respective pods  pods to the service .
+
+* kubectl get svc
+
+* kubectl get pods -owide
+
+* same application runs on two nodes based on node labels
+
+* 
   
     
-LoadBalancer
-ExternalName
+#### LoadBalancer
+
+* one single ip given to acess the application , we prefer LoadBalancer . the application access out side the cluster also
+
+* but loadbalancer type that will work only in the cloud provider . 
+
+* if in the k8s cluster environment that hosted down any cloud provider like ruby cloud or aws  . then you be able to use the loadbalancer you would get external ip to the load balancer , 
+
+![hema](./images/complet-k8s-Loadbalancer.png)
+
+*  external ip in the Load balancer is chargable
+
+#### ExternalName
+
+![hema](./images/complete-external-ip.png)
+
+
+
+
 
 
 
