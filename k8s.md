@@ -973,7 +973,9 @@ subsets:
 * incase you have 10 worker nodes , in 10 nodes same applicaiton will be run in the 10 worker nodes the ips will be different , then we will access the single applications with 10 different ip adresses .
 
 
-![hema](./images/completek8s-clusterip.png)
+
+![hema](./images/service-nodeport.png)
+
 
 * node-port type expose to your pod to external network  with the same target port, user can access it using the worker node ip and port  will you exposes.
 
