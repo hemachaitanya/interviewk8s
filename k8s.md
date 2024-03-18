@@ -876,7 +876,7 @@ subjects:
 
 ![hema](./images/service-completek8s.png)
 
----yaml
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -908,7 +908,7 @@ spec:
     - name: nginx-svc
       protocol: TCP
       port: 80
----
+```
 
 * kubectl get svc --all-namespaces
 
@@ -920,7 +920,7 @@ spec:
 
 ##### Endpoints help identify what pods are running for the service, Endpoints are created and managed by services
 
----yaml
+```yaml
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -945,7 +945,7 @@ subsets:
   - name: nginx-svc
     port: 80
     protocol: TCP
----
+```
 
 *  kubectl apply -f endpoint.yaml
 
@@ -1005,6 +1005,22 @@ subsets:
 #### ExternalName
 
 ![hema](./images/complete-external-ip.png)
+
+## INGRESS(ingress controller+ingress)
+
+* Ingress is k8s specific Layer & HTTP Load Balancer which is accesible
+externally 
+
+* out side traffic go to the ingress controller , we have must and should we have ingress config file . then after  it redirect to the traffic .
+
+* 
+
+
+
+![hema](./images/complete-k8s-ingresss.png)
+
+* 
+
 
 
 
