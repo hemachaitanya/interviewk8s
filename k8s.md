@@ -1201,8 +1201,7 @@ spec:
                 name: identity-svc
                 port:
                   number: 80
-
----
+```
 kubectl apply -f <ingress.yaml>
 kubectl apply -f <ingress.yaml>
 kubectl describe ingress <ingress_name>
@@ -1215,10 +1214,136 @@ kubectl logs <ingress_controller_pod_name>
 
 
 
+
+## ETCD
+
+* We can setup HA Cluster using two topologies
+
+  (1) stacked etcd : The distributed data storage (etcd) is part of nodes managed by kubeadm
+
+  (2) external etcd : 
+
+  *  This HA Cluster will have external etc where the data is distributed and stored
+  * Each control plane node has kube-apiserver, kube-scheduler, kube controller manager
+  * This is more HA and it needs minimum six nodes to setup master
+
+* Efficient Terminal Management: 
+
+      apt update && apt install tmux -y
+
+    Tmux allows you to manage multiple terminal sessions within a single window, enabling you to work on several tasks simultaneously or switch between tasks quickly.
+
+*  ctrl + b , : rename window
+* cntl + b % : create vertical split
+* cntl + b " : create horizantal split
+
+### RBACK 
+     raback mainly containes 3 types 
+
+##### (1) subject: 
+          
+          user
+          group
+          service account : Service Account is an user account for non human (like AWS roles)
+          * Whenever we create a namespace a service account called as default is 
+          
+      kubectl get sa
+      kubectl get secrets
+      kubectl create ns <namespace-name>
+      kubectl config get-context --current namespace=<namespace-name>
+      kubectl create sa <service-account-name>
+      kubectl get sa
+      kubectl get secrets
+      cd sa
+      ls -lrt
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  labels:
+    app: test-pod
+spec: 
+  serviceAccount: hemasa
+  containers:
+    - name: hema
+      image: nginx
+      ports:
+        - containerPort: 80 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pod-svc
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 32000
+      port: 80
+
+```
+
+##### (2) API resources: 
+##### (3) operations 
+
+inside pod you will run the below commands
+   * kubectl get no
+
+   * kubectl get po -owide
+
+   * kubectl create namespace <name-of-ns>
+
+   * kubectl get ns
+
+   * kubectl get serviceaccount -n <name-of-ns>
+
+   * APISERVER=https://kubernetes.default.svc
+SERVICEACCOUNT_DIR=/var/run/secrets/kubernetes.io/serviceaccount
+TOKEN=$(cat ${SERVICEACCOUNT_DIR}/token)
+CACERT=${SERVICEACCOUNT_DIR}/ca.crt
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/default/pods
+
+
+![hema](./images/no-podsinfo-complete-k8s.png)
+
+
+   * kubectl create serviceaccount <service-name>
+
+   * kubectl create rolebinding qtsa-readonly \
+    --clusterrole view \
+    --serviceaccount=default:qtsa \
+    --namespace=default
+  
+  * goto default namespace 
+
+  * kubectl config get-context --current --namespace=default
+
+  * create one service account 
+
+
+  * create one pod
+
+  * kubectl get po -owide
+
+  * kubectl exec -it <pod-name> -- /bin/sh
+
+  * create kube-api server using below script or commands
+
+  *  APISERVER=https://kubernetes.default.svc
+SERVICEACCOUNT_DIR=/var/run/secrets/kubernetes.io/serviceaccount
+TOKEN=$(cat ${SERVICEACCOUNT_DIR}/token)
+CACERT=${SERVICEACCOUNT_DIR}/ca.crt
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISERVER}/api/v1/namespaces/default/pods
+
+![hema](./images/pods%20info-complete-k8s.png)
+
+
+
+
+
      
 
       
-```
 
 
 

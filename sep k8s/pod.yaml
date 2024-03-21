@@ -93,6 +93,38 @@ roleRef:
   kind: Role
   name: hema
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: hema
+  labels:
+    app: web-app
+    env: uat
+spec:
+  containers: 
+    - name: webapplication 
+      image: caddy 
+      ports: 
+        - containerPort: 80 
+          protocol: TCP 
+--- 
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: hema-svc
+spec:
+  selector:
+    app: web-app
+  ports: 
+    - name: rama
+      port: 80 
+      targetPort: 80
+      protocol: TCP 
+  type: ClusterIP 
+    
+
+
 
 
       
