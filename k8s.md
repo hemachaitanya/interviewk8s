@@ -1338,6 +1338,13 @@ curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISE
 ![hema](./images/pods%20info-complete-k8s.png)
 
 
+## RBAC
+
+![hema](./images/RBAC.png)
+
+
+
+
 
 
 
