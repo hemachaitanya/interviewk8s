@@ -1342,6 +1342,102 @@ curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISE
 
 ![hema](./images/RBAC.png)
 
+* kubectl auth can-i --list ---as="system:serviceaccount:<namespace>:<service-account-name>"
+
+* 
+
+
+### REPLICA SET AND CONTROLLER
+
+* replicaset is advanced version of replicatn controller its supports both equality (= , !=) and set based (expression like : In , Notin )
+
+* kubectl create namespace <name>
+
+* kubectl config set-context --current --namespace=<name>
+
+* kubectl get nodes -owide
+
+* kubectl get pods -owide
+
+* kubectl cordon <node-name>
+
+* kubectl drain --ignore-daemonsets <nodename>
+
+![hema](./images/cordon-complete-k8s.png)
+
+* kubectl uncordon <nodename>
+
+* kubectl get nodes 
+
+![hema](./images/uncordon-k8s.png)
+
+### resourcequatos and limits
+
+* inside the namespace we have allocates some memory  , any pods share with these memory only . then suddendly our cpu is exceeded at that time pod cannot in running state
+
+* to overcame that issue we mentions the limits of namespaces in resourcequatos and limits
+
+* We need to put restriction on namespace to restrict how many pvc claims, loadbalancers, nodeports
+
+```yaml
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: activity-quota
+spec:
+  hard:
+    services: "2"
+    pods: "10"
+    services.nodeports: "2"
+```
+
+## Scheduling and Tooling
+
+* K8s Cluster can contain multiple nodes and workloads are scheduled on the node by kube-schedule and there are different factors influencing the decision to select the node
+
+(1) node selector
+
+(2) node affinity
+
+(3) taints and tolerations
+
+* Container Resource Limits influence this decision as kube-Scheduler will sum all the requests of container in a Pod spec and schedules it on a suitable node
+
+* If the Pod doesnot schedule due to insufficient resources available on nodes in the Events we will see the following reasons
+
+  PodExceedsFreeCpu
+
+  PodExceedsFreeMemory
+
+###  Node-Selector ( labels will be mathing then only on that labeld nodes pods will be sheduled)
+
+* kubectl get nodes
+
+* kubectl get nodes --show-labels
+
+* kubectl label node <nodename> <key>=<value> --overwrite 
+
+* above command is used 
+
+
+
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: matching
+spec:
+  nodeSelector:
+    diskspeed: high    ## we apply labels in *  kubectl get no --show-labels values here 
+
+  containers:
+    - name: mycontainer
+      image: nginx
+```
+
+
 
 
 
