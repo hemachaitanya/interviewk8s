@@ -1418,7 +1418,8 @@ spec:
 
 * kubectl label node <nodename> <key>=<value> --overwrite 
 
-* above command is used 
+* above command is used to change the node volues (or) labels
+
 
 
 
