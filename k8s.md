@@ -1437,6 +1437,128 @@ spec:
     - name: mycontainer
       image: nginx
 ```
+###  Affinity
+
+![hema](./images/affinity-complete-k8s.png)
+
+![hema](./images/nodeaffinity-k8s.png)
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: matching
+spec:
+  activeDeadlineSeconds: 5
+  affinity:
+    nodeAffinity:    ### for this option we have anoter option we select "preferance" also for soft and hard
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:      ## these key and values are taken from "kubectl get nodes --show-labels"
+              - key: diskspeed
+                operator: In
+                values: 
+                  - low
+                  - high 
+  containers:
+    - name: hema
+      image: caddy
+      ports:
+        - containerPort: 80
+```
+
+
+
+
+
+
+
+
+
+
+
+### TAINT AND TOLERATION
+
+* taint is a property of node to repel the pods.
+
+* if you want to attach the pods 
+
+* taint used in Dedicated Hardware & evictions 
+
+* tainet effects is 
+
+    noSheduled
+    noExecute
+    preferNoShedule
+
+* kubectl --help
+
+* kubectl taint --help
+
+* kubectl tainet nodes <nodename> <taintkey>:<taintvalue>:<tainteffect>
+
+* yq --help (this yq is used to modifydata in yaml files)
+
+### Problems or challenges CI/CD pipeline of k8s
+
+* Consider a normal CI/CD pipeline where the builds are triggered once in a day (nightly builds) and we need to create 3 environments. but our manifest file is same for all envs so we can use 
+
+(1)helm
+(2) kustomize
+
+
+### helm
+ 
+ * if you consider k8s as Operating System  helm is a package manager for k8s .
+
+      curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+
+      chmod 700 get_helm.sh
+
+      ./get_helm.sh
+
+![hema](/images/helmchats-k8s.png)
+
+![hema](./images/helmtemlates-k8s.png)
+
+    
+    https://github.com/arttor/helmify/releases/download/v0.4.11/helmify_Linux_arm64.tar.gz
+
+    sudo tar -xvzf helmify_0.4.3_Linux_64-bit.tar.gz
+
+    sudo cp helmify /usr/bin/
+
+    helmify --version
+
+    helm has 3 files they are
+
+    1. templet.yaml
+    2. values.yaml
+    3. output.yaml
+
+![hema](./images/helmplayground-k8s.png)
+
+
+### kustomize
+
+* Kustomize is a solution that creates k8s components by overlaying declarative yaml artifacts without changing actual files
+
+![hema](./images/kusomize-k8s.png)
+
+#### funtionality
+
+* template : helm have teplate but kuzomize no need to the template
+
+* setup: helm needs some setup , kustomize don't need any setup
+
+* configuration: helm and kustomize both  manages multipe configurations with one base file.
+
+
+
+ 
+
+
+
 
 
 
