@@ -1618,6 +1618,102 @@ spec:
 
 * All managed providers give us the option either by default or by add-ons the feature of Network policy .
 
+[linkfor trouble shooting](https://directdevops.blog/2023/10/03/completek8s-classroomnotes-03-oct-2023/)
+
+###  AKS OR EKS 
+
+* controlle plane is maintained by cloud . for the nodes pay the bills as you pay for normal vm.
+
+* worker nodes can be scalled automatically
+
+### Features:
+
+* Identity and Security Management
+
+* Kubernetes RBAC: AKS supports native K8s RBAC
+
+* Azure AD: AKS can be configured with Azure AD
+
+* Integrated Logging and monitoring
+
+* Container insights feature in Azure Monitor can be addon to the AKS cluster
+Azure Monitor managed service for Prometheus
+
+  * Cluster node and pod scaling
+
+* Cluster autoscaler for scaling nodes and pod autoscaler for scaling pods
+Cluster node upgrades
+
+  * Automatable cluster node upgrades
+
+* Storage volume support: 
+
+    Storage classes suppported for azure storage backends
+
+    Ingress with Azure Applicaton Gateway
+
+[refer link for ADDons](https://learn.microsoft.com/en-us/azure/aks/integrations#available-add-ons)
+
+
+Azure CNI:
+CNI
+CNI Overlay
+CNI powered by Cilium
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: azure-vote-bank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-bank
+    spec:
+      template:
+        metadata:
+          labels:
+            app: azure-vote-bank
+        spec:
+          nodeSelector:
+            "kubernetes.io/os": linux
+          containers:
+            - name: azure-vote-bank
+              image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+              env:
+                - name: ALLOW_EMPTY_PASSWORD
+                  value: "yes"
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
+                limits:
+                  cpu: 200m
+                  memory: 256Mi
+              ports:
+                - containerPort: 6379
+                  name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-svc
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: azure-vote-bank
+    
+    
+
+
+```
+
+
+
+
+
 
 
 
