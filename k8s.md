@@ -1545,13 +1545,80 @@ spec:
 
 ![hema](./images/kusomize-k8s.png)
 
-#### funtionality
+   #### funtionality
 
 * template : helm have teplate but kuzomize no need to the template
 
 * setup: helm needs some setup , kustomize don't need any setup
 
 * configuration: helm and kustomize both  manages multipe configurations with one base file.
+
+
+### NETWORKING
+
+* to access the application inside the pod is called service .
+
+* pod is nothing but have application on top of container 
+
+* pod will be created we get one some ip address for each od
+
+* this pods will be managed by deployment , thes deployment managed by service . the service connect to the service based  on lables ..
+
+*  ingress service exposess the http & https applications only 
+
+*  incase two applications are running in multi tanent cluster , with three differant namespaces .
+
+* kubectl -n <1-namespace> exec <in-1-ns-podname> --curl <pod ip>
+
+* kubectl describe namespace <namespace-name>
+
+* kubectl config view --minify --output 'jsonpath={..namespace}'
+
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: apptodb
+spec:
+  podSelector:
+    matchLabels:
+      tier: db
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              tier: app
+      ports:
+        - port: 80
+          protocol: TCP
+```
+
+![hema](./images/network-policy-k8s.png)
+
+* By default all the pods in k8s are open for communication. Network policy is k8s impementation of network firewalls.
+
+* Network policy’s bring this, we can build ingress/egress rules based on
+    
+    CIDR Blocks
+
+    Pod’s Label selectors
+
+    namespaces
+
+* Network Policy is part of CNI’s implementation and not all CNI plugins support Network policy, some of the popular CNI plugins which implement network policy are
+
+    Calico
+
+    Cilium
+
+    Kube-router
+
+    Weave net
+
+* All managed providers give us the option either by default or by add-ons the feature of Network policy .
+
+
 
 
 
