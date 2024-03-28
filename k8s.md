@@ -1704,11 +1704,294 @@ spec:
     - port: 6379
   selector:
     app: azure-vote-bank
-    
-    
-
-
 ```
+### autoscalling (increasing or decreasing the number of resources) 
+
+* azure
+
+*Create an aks cluster with network plugin azure, enable addon ingress-appgw
+
+    az aks create -n myCluster -g myResourceGroup --network-plugin azure --enable-managed-identity -a ingress-appgw --appgw-name myApplicationGateway --appgw-subnet-cidr "10.225.0.0/16" --generate-ssh-keys
+
+# Get application gateway id from AKS addon profile
+
+    appGatewayId=$(az aks show -n myCluster -g myResourceGroup -o tsv --query "addonProfiles.ingressApplicationGateway.config.effectiveApplicationGatewayId")
+
+# Get Application Gateway subnet id
+
+    appGatewaySubnetId=$(az network application-gateway show --ids $appGatewayId -o tsv --query "gatewayIPConfigurations[0].subnet.id")
+
+# Get AGIC addon identity
+
+    agicAddonIdentity=$(az aks show -n myCluster -g myResourceGroup -o tsv --query "addonProfiles.ingressApplicationGateway.identity.clientId")
+
+# Assign network contributor role to AGIC addon identity to subnet that contains the Application Gateway
+
+    az role assignment create --assignee $agicAddonIdentity --scope $appGatewaySubnetId --role "Network Contributor"
+
+*  Now deploy the simple ingress using the below yaml
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aspnetapp
+  labels:
+    app: aspnetapp
+spec:
+  containers:
+  - image: nginx
+    name: aspnetapp-image
+    ports:
+    - containerPort: 80
+      protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnetapp
+spec:
+  selector:
+    app: aspnetapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aspnetapp
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          service:
+            name: aspnetapp
+            port:
+              number: 80
+        pathType: Exact
+```
+
+    kubectl get ingress
+
+    az group create -n <name-of-rg> -l <region>
+
+    az aks create -n myAKSCluster -g <rg-name> --enable-addons azure-keyvault-secrets-provider
+
+    az aks nodepool update --enable-cluster-autoscaler -g myResourceGroup --cluster-name myAKSCluster -n nodepool1 --min-count 1 --max-count 3
+
+* aws
+
+* create one eks polisi
+
+* create one group name eks name is eks admin group
+
+* attach that policy to that group
+
+* Now create a user called as qtadmin and assign the user to the group EKS-Admins
+
+* Now add a node group
+
+* Configure AWS CLI with the qt admin user access key and secret key
+
+* Now update kubeconfig by executing command
+
+    aws eks update-kubeconfig --region us-west-2 --name myekscluster
+
+* Now create some resources using the following yaml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-back
+  template:
+    metadata:
+      labels:
+        app: azure-vote-back
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-back
+        image: mcr.microsoft.com/oss/bitnami/redis:6.0.8
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 6379
+          name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-back
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: azure-vote-back
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-front
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-vote-front
+  template:
+    metadata:
+      labels:
+        app: azure-vote-front
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-front
+        image: mcr.microsoft.com/azuredocs/azure-vote-front:v1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+        env:
+        - name: REDIS
+          value: "azure-vote-back"
+      - name: stress
+        image: alpine
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        command:
+          - sleep
+          - 1d
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: azure-vote-front
+```
+
+    kubectl aply -f <name.yaml>
+
+#### fargate
+
+    eksctl crate cluster <clustername> --region <name-region> --forgate
+
+    kubectl get nodes
+
+    kubectl get pods
+
+    kubectl create deployment <name> --image:caddy
+
+    kbectl create service nodeport caddy --tcp=80:80
+
+* by using above commands no ec2 nodes will be created than pods will be shceduled based on spindup and run with in the amazon infrastructure.
+
+* fargate is auto scalles easily based on pods/demands
+
+*  all the containers are serverless option in eks , cost will be reducess
+
+![heam](./images/fargate-k8s.png)
+
+
+#### karpenter
+
+* karpenter is a opensource node-autoscaller for kubernetes
+
+* karpenter acts as smart(intelegent) , we have small application or pod thats time karpenter creates small size of node thatas why node cost will be decreases .
+
+* Why its a good fit for EKS
+  Flexibility
+
+  Responsive Scaling
+
+  Mixed Instance Types
+
+  Terminations
+
+  Integrated with AWS Services
+
+* Karpenter concepts
+
+    Provisioner
+
+    TTL for Nodes
+
+    Resource Based scheduling
+
+    Spot instance
+
+    Scalability
+
+    Extensibility
+
+![hema](./images/karpenter.png)
+
+
+
+    helm repo add karpenter https://charts.karpenter.sh
+    $ helm repo update
+    $ helm upgrade --install --skip-crds karpenter karpenter/karpenter --namespace karpenter \
+      --create-namespace --set serviceAccount.create=false --version 0.5.0 \
+      --set controller.clusterName=eks-karpenter-demo \
+      --set controller.clusterEndpoint=$(aws eks describe-cluster --name eks-karpenter-demo --query "cluster.endpoint" --output json) \
+      --wait
+       # for the defaulting webhook to install before creating a Provisioner
+
+
+
+
+    aws autoscaling update-auto-scaling-group --auto-scaling-group-name myAutoScalingGroup --min-size 1 --max-size 3
+
+    aws eks update-kubeconfig --name <your-cluster-name>
+
+    kubectl autoscale deployment <your-deployment-name> --cpu-percent=50 --min=1 --max=10
+
+    kubectl get hpa
+
+
+
+
+
+
+
+
+
 
 
 
