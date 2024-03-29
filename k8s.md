@@ -658,6 +658,7 @@ metadata:
 automountServiceAccountToken: true
 
 ### attach service account to pod
+```yaml
 
 ---
 apiVersion: v1
@@ -694,10 +695,11 @@ rules:
       - list
       - get
       - watch
+```
 
 ### create a role binding 
 
----
+```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
@@ -712,6 +714,7 @@ subjects:
     name: <name>
   - kind: ServiceAccount
     name: robo
+```
 
 ### Role and RoleBindings apply to a particular namespace
 
@@ -1935,6 +1938,150 @@ spec:
 
 * karpenter acts as smart(intelegent) , we have small application or pod thats time karpenter creates small size of node thatas why node cost will be decreases .
 
+* Note: It is recommended to use managedNodeGroups or fargate repofiles with karpenter
+
+![hema](./images/karpenter.png)
+
+
+
+### karpenter installations
+```yaml
+export KARPENTER_VERSION=v0.31.0
+export AWS_PARTITION="aws" # if you are not using standard partitions, you may need to configure to aws-cn / aws-us-gov
+export CLUSTER_NAME="qtk-karpenter-demo"
+export AWS_DEFAULT_REGION="us-west-2"
+export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+export TEMPOUT=$(mktemp)
+
+echo $KARPENTER_VERSION $CLUSTER_NAME $AWS_DEFAULT_REGION $AWS_ACCOUNT_ID $TEMPOUT
+
+curl -fsSL https://raw.githubusercontent.com/aws/karpenter/"${KARPENTER_VERSION}"/website/content/en/preview/getting-started/getting-started-with-karpenter/cloudformation.yaml  > $TEMPOUT \
+&& aws cloudformation deploy \
+  --stack-name "Karpenter-${CLUSTER_NAME}" \
+  --template-file "${TEMPOUT}" \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides "ClusterName=${CLUSTER_NAME}"
+
+eksctl create cluster -f - <<EOF
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: ${CLUSTER_NAME}
+  region: ${AWS_DEFAULT_REGION}
+  version: "1.27"
+  tags:
+    karpenter.sh/discovery: ${CLUSTER_NAME}
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: karpenter
+      namespace: karpenter
+    roleName: ${CLUSTER_NAME}-karpenter
+    attachPolicyARNs:
+    - arn:${AWS_PARTITION}:iam::${AWS_ACCOUNT_ID}:policy/KarpenterControllerPolicy-${CLUSTER_NAME}
+    roleOnly: true
+
+iamIdentityMappings:
+- arn: "arn:${AWS_PARTITION}:iam::${AWS_ACCOUNT_ID}:role/KarpenterNodeRole-${CLUSTER_NAME}"
+  username: system:node:{{EC2PrivateDNSName}}
+  groups:
+  - system:bootstrappers
+  - system:nodes
+
+managedNodeGroups:
+- instanceType: t2.large
+  amiFamily: AmazonLinux2
+  name: ${CLUSTER_NAME}-ng
+  desiredCapacity: 1
+  minSize: 1
+  maxSize: 4
+
+## Optionally run on fargate
+# fargateProfiles:
+# - name: karpenter
+#  selectors:
+#  - namespace: karpenter
+EOF
+
+export CLUSTER_ENDPOINT="$(aws eks describe-cluster --name ${CLUSTER_NAME} --query "cluster.endpoint" --output text)"
+export KARPENTER_IAM_ROLE_ARN="arn:${AWS_PARTITION}:iam::${AWS_ACCOUNT_ID}:role/${CLUSTER_NAME}-karpenter"
+
+echo $CLUSTER_ENDPOINT $KARPENTER_IAM_ROLE_ARN
+
+
+# Logout of helm registry to perform an unauthenticated pull against the public ECR
+helm registry logout public.ecr.aws
+
+helm upgrade --install karpenter oci://public.ecr.aws/karpenter/karpenter --version ${KARPENTER_VERSION} --namespace karpenter --create-namespace \
+  --set serviceAccount.annotations."eks\.amazonaws\.com/role-arn"=${KARPENTER_IAM_ROLE_ARN} \
+  --set settings.aws.clusterName=${CLUSTER_NAME} \
+  --set settings.aws.defaultInstanceProfile=KarpenterNodeInstanceProfile-${CLUSTER_NAME} \
+  --set settings.aws.interruptionQueueName=${CLUSTER_NAME} \
+  --set controller.resources.requests.cpu=1 \
+  --set controller.resources.requests.memory=1Gi \
+  --set controller.resources.limits.cpu=1 \
+  --set controller.resources.limits.memory=1Gi \
+  --wait
+
+
+cat <<EOF | kubectl apply -f -
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot", "ondemand"]
+  limits:
+    resources:
+      cpu: 1000
+  providerRef:
+    name: default
+  consolidation: 
+    enabled: true
+---
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: ${CLUSTER_NAME}
+  securityGroupSelector:
+    karpenter.sh/discovery: ${CLUSTER_NAME}
+EOF
+
+
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inflate
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: inflate
+  template:
+    metadata:
+      labels:
+        app: inflate
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: inflate
+          image: public.ecr.aws/eks-distro/kubernetes/pause:3.7
+          resources:
+            requests:
+              cpu: 1
+EOF
+```
+
 * Why its a good fit for EKS
   Flexibility
 
@@ -1960,6 +2107,21 @@ spec:
 
     Extensibility
 
+* EKS is a managed service and is integrated with AWS Ecosystem
+
+* Pods get vpc network addresses
+
+* Allowing IAM users or groups to acess kubernetes
+* control plane and data plane logs and metrics can be sent to AWS Cloud Watch
+* 
+* EKS pricing models
+
+* Fixed Control plane costs (0.1$ per hour)
+
+* Variable costs (Worker nodes):
+  EC2
+  Fargate
+
 ![hema](./images/karpenter.png)
 
 
@@ -1973,8 +2135,55 @@ spec:
       --wait
        # for the defaulting webhook to install before creating a Provisioner
 
+  ```yaml
+  apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: myekscluster
+  region: us-west-2
+  version: "1.27"
+  tags:
+    purpose: learning
+
+nodeGroups:
+  - name: nodegroup1
+    amiFamily: "AmazonLinux2"
+    instanceType: t3.large
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+
+managedNodeGroups:
+  - name: m-ng-1
+    minSize: 1
+    maxSize: 2
+    desiredCapacity: 1
+    instanceType: t3.large
+
+fargateProfiles:
+  - name: fp-dev
+    selectors:
+      - namespace: dev
+        labels:
+          env: dev
+  ```
 
 
+#### delete the cluster
+
+      helm uninstall karpenter --namespace "${KARPENTER_NAMESPACE}"
+
+    aws cloudformation delete-stack --stack-name "Karpenter-${CLUSTER_NAME}"
+    aws ec2 describe-launch-templates --filters "Name=tag:karpenter.k8s.aws/cluster,Values=${CLUSTER_NAME}" |
+        jq -r ".LaunchTemplates[].LaunchTemplateName" |
+        xargs -I{} aws ec2 delete-launch-template --launch-template-name {}
+
+    eksctl delete cluster --name "${CLUSTER_NAME}"
+
+[refer here](https://github.com/asquarezone/CompleteK8s/tree/master/Sep23/CKA)
+
+some play books available here
 
     aws autoscaling update-auto-scaling-group --auto-scaling-group-name myAutoScalingGroup --min-size 1 --max-size 3
 
@@ -1983,6 +2192,55 @@ spec:
     kubectl autoscale deployment <your-deployment-name> --cpu-percent=50 --min=1 --max=10
 
     kubectl get hpa
+
+[metric-server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+
+[eksctl-configscheama](https://eksctl.io/usage/schema/)
+
+## Google Kubernetes Engine
+* This is kubernetes as a service from GCP i.e this will manage control plane and charge you according virtual machine prices for the nodes created.
+
+* GKE has two modes for create kubernetes clusters
+
+(1) GKE Standard
+
+(2) GKE Autopilot
+
+GKE Clusters consits of one or more control plane nodes and multiple worker nodes.
+
+  ###### GKE Standard mode:
+
+* default node machine type is e2-medium
+
+* Each node has the following options for os images
+
+     * Container optimized OS with containerd
+
+     * Ubuntu with containerd
+
+     * Windows LTS with containerd
+
+     * Container optimized OS with Docker
+
+      * Ubuntu with Docker
+
+    *  Windows LTS with Docker
+
+##### GKE Autopilot: 
+This is roughly equivelent to fargate profiles in AWS (Serverless k8s)
+
+Refer Here for the differences in standard and Autopilot
+
+Autopilot cluster creation: View classroom recording
+
+![hema](./images/gke-cloudrun.png)
+
+![hema](./images/gke-autopiolet.png)
+
+
+
+
+
 
 
 
