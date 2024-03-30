@@ -2237,10 +2237,276 @@ Autopilot cluster creation: View classroom recording
 
 ![hema](./images/gke-autopiolet.png)
 
+### GITOPS
+
+* CI/CD tools need to have
+
+  a node/agent with k8s credentials configured and they push the changes to k8s cluster
+
+* For storing k8s manifests we have two approaches
+
+    source code and manifests in same repo
+
+    source code and manifests in different repo (This is best practice)
+
+In the manifests we define desired state and if the changes are done manully in the cluster there is breakage of link
+
+![hema](./images/Git-Ops.png)
+
+![hema](./images/devops.png)
+
+![hema](./images/gitops.png)
+
+* Popular GitOps Operator
+
+  Flux
+
+  Argo CD
+  
+  Jenkins X
+
+![hema](./images/argocd.png)
+
+### RADAR
+
+* 
+
+
+# consepts in docker and k8s
 
 
 
+## Docker
+ * Introduction
 
+ [refer here](https://www.javatpoint.com/docker-architecture)
+ 
+  Why Containers
+  Alternative Options
+  Microservices and Containers
+  Docker Components
+  Docker Networking
+  Docker Volumes
+  Docker Plugins
+  Building Docker Images
+  Standards:
+  OCI
+  CNM
+  Windows Docker Containers
+  Customize Docker
+  Docker Security
+  Docker Enterprise
+  Docker Image Scans
+  Docker Compose
+  Intro to Swarm (*)
+  Registries
+  Docker Registry
+  Docker Hub
+  ACR
+  ECR
+  GCR
+  JFrog
+
+ ###  Kubernetes (k8s)
+
+  Why K8s
+  k8s architecture
+  Workloads and Controllers
+  Pod
+  ReplicaSets
+  DaemonSets
+  Deployments
+  StatefulSets
+  Service
+  Ingress
+  Endpoints
+  Endpoint Slices
+  Jobs
+  CronJobs
+  Policies:
+  NetworkPolicy
+  PodSecurityPolicy
+  PodDisruptionBudget
+  Storage:
+  Volumes
+  PersistentVolumes
+  StorageClasses
+  CSI
+  Persistent Volume Claims
+  Networking:
+  CNI
+  CNI Plugins
+  Scheduling:
+  Pod Affinity
+  Node Affinity
+  Taints and toleration
+  Scaling:
+  Horizontal Pod Scaling
+  Vertical Pod Scaling
+  Auto Scaling
+  Node Auto scaler
+  Cluster Auto scaler
+  Configurations:
+  Config Maps
+  Secrets
+  Security Contexts
+  Resource Boundaries
+  Service Accounts
+  Multi-Container Pods
+  Health Probes
+  Debugging in k8s
+  Ephemeral Container
+  Troubleshoot pods
+  Interactive shells
+  Design of Pods
+  Labels
+  Annotations
+  Deployment
+  Restart Behaviors
+  Jobs/Cron Jobs
+  Configuring Retained history
+  Services & Networking
+  Port Mappings
+  Accessing Services
+  Network Policies
+  Restricting Access to Ports
+  State Persistence
+  CSI
+  Static vs Dynamic Provisioning
+  Cluster Architecture => Installation and Configurations
+  RBAC:
+  Overview
+  Subject
+  Service Account
+  Assinging SA to a Pod
+  RBAC API Primitives
+  Roles
+  Role Binding
+  Namespace and Cluster wide RBAC
+  Aggregate RBAC Rules
+  Installation
+  Make HA Cluster
+  Backing up and Restoring etcd
+  Scheduling:
+  Container Resource Requests
+  Templating tools:
+  yq
+  Kustomize
+  Helm
+  Networking:
+  Service
+  Ingress
+  CORE DNS
+  Choosing a right CNI Plugin
+  Storage:
+  Configuring PVs
+  Troubleshooting:
+  Logging:
+  Cluster loggin
+  Node Loggin
+  Troubleshoot pods
+  Trouble shoot cluster failure
+  Network policies to restrict
+  Pod-Pod
+  kube-bench
+  Fixing security issues
+  Creating an ingres with TLS Termination
+  Protect Node metadata and Endpoints
+  Protect GUI Elements
+  Cluster Hardening
+  Restricting API Server
+  Update k8s frequently
+  System Hardening
+  Minimize HostOS footprint
+  Minimize IAM Roles
+  Minimize External Access to Network
+  Kernel Hardening tools
+  AppArmour
+  SecComp
+  Minimizing Microservice Vulnerabiliies
+  Secrets
+  mTLS
+  Security Domains
+  Static Image Scaning
+  Hadolint
+  kubesec
+  Runtime Security
+  Behavior Analysis
+  Container immutability
+  Audit logs
+  Networking:
+  AKS
+  EKS
+  GKE
+  Argo CD
+  Service Mesh
+  Istio
+  Data Plane: Envoy
+  Istio Gateways
+  Traffic Control
+  Resilence
+  Observability:
+  Jaeger
+  kiali
+  Grafana
+  Securing Microservice
+  Linkerd
+  Helm
+  Production K8s:
+  Secret Management
+  Admission Controllers
+  Identity
+  Platform Services
+  Autoscaling
+  Multitenancy
+  Platform Abstractions
+  K8s Patterns
+  Predictable Demands
+  Pod Priority
+  Capacity Planning
+  Behavioral Patterns
+  Batch Jobs
+  Periodic Jobs
+  Daemon Service
+  Singleton Service
+  Stateless Service
+  Stateful Services
+  Structural
+  Init Containers
+  Side Cars
+  Adaptors
+  Ambassador
+  Configuration
+  Immutable Configuration
+  EnvVar Configuration
+  Security
+  Process Containement
+  Network Segmentation
+  Secure Configuration
+  Access Control
+  Advanced
+  Operator
+  Elastic Scaling
+  Image Builder
+  Observability:
+  Prometheus
+  Grafana
+  Basic look at cloud monitoring
+  Practical Highlights
+  Deploying and managing
+  monolith
+  Microservice
+  Event based microservices
+  Technology:
+  .net
+  java
+  python
+  nodejs
+  angular
+  react
+  CRD
+  Operator framework
+  Rancher
 
 
 
