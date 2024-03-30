@@ -2280,7 +2280,8 @@ In the manifests we define desired state and if the changes are done manully in 
  * Introduction
 
  [refer here](https://www.javatpoint.com/docker-architecture)
- 
+
+ ```
   Why Containers
   Alternative Options
   Microservices and Containers
@@ -2507,6 +2508,7 @@ In the manifests we define desired state and if the changes are done manully in 
   CRD
   Operator framework
   Rancher
+```
 
 
 
