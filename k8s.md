@@ -1603,6 +1603,7 @@ spec:
 
 * network policy it will controle the traffic between the pods.
 
+
 * Network policy’s bring this, we can build ingress/egress rules based on
     
     CIDR Blocks
@@ -2309,8 +2310,11 @@ In the manifests we define desired state and if the changes are done manully in 
   ECR
   GCR
   JFrog
+```
 
  ###  Kubernetes (k8s)
+ 
+ ```
 
   Why K8s
   k8s architecture
