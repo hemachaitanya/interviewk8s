@@ -1599,7 +1599,9 @@ spec:
 
 ![hema](./images/network-policy-k8s.png)
 
-* By default all the pods in k8s are open for communication. Network policy is k8s impementation of network firewalls.
+* By default all the pods in k8s are open for communication. Network policy is k8s impementation of network firewalls. 
+
+* network policy it will controle the traffic between the pods.
 
 * Network policy’s bring this, we can build ingress/egress rules based on
     
