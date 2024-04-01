@@ -651,11 +651,13 @@ name is second & image is ubuntu sleep 1d
 * kubectl config use-context <name>-context
 
 ### create one service account 
+```yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: robo
 automountServiceAccountToken: true
+```
 
 ### attach service account to pod
 ```yaml
@@ -767,13 +769,13 @@ subjects:
 
   * kubectl get --all -namespaces
 
-  * kubectl get pods -n <name-of-namespace>
+  * kubectl get pods -n <nameofnamespace>
 
-  * kubens <namespace-name>
+  * kubens <namespacname>
 
-  * kubectl delete pods --all -n <name-of-ns>
+  * kubectl delete pods --all -n <nameofns>
 
-  * kubectl config set-context --current --namespace=<name-of-ns>
+  * kubectl config set-context --current --namespace=<nameofns>
 
           current-context   Display the current-context
 
@@ -835,7 +837,9 @@ subjects:
 
       * kubectl get po -owide
 
-      * kubectl exec -it <podname> -c <contkubectl exec -it mypod -c container1 -- /bin/bash ainer1-name> -- /bin/bash
+      * kubectl exec -it <podname> -c <container name> -- /bin/bash
+      
+      * kubectl exec -it mypod -c container1 -- /bin/bash ainer1-name> -- /bin/bash
 
       * kubectl get pods mypod -o=jsonpath='{range .status.podIP}{"Container 1 IP: "}{@}{"\n"}{end}'
 
