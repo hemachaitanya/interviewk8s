@@ -131,6 +131,16 @@ kubectl create networkpolicy hema --pod-selector=app=frontend --policy-types=ing
   become: yes
   hosts: all
 
+ ## apply
+
+ * kubectl apply -f <ymal-file>
+
+ * --wait=false:
+        If true, wait for resources to be gone before returning. This waits for finalizers.
+
+* --prune=false:
+        Automatically delete resource objects, that do not appear in the configs and are created
+        by either apply or create --save-config. Should be used with either -l or --all.
 * 
 
 
