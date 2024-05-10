@@ -1446,6 +1446,27 @@ spec:
 ```
 ###  Affinity
 
+
+* node affinity and node selector are same.  but node selector is not a very flexible , thisthis will instruct this deployment to deploy all the pods on nodes with label(simplest way to bind the pods to a specific nodes)
+
+* nodeaffinity is a advanced approch would be use affinity , and we will start with node affinity ,it's more similar to the node affinity , but it's much ,ore flexible
+
+* node affinity is also be used all k8s objects  , such as deployment , stateful sets .....
+
+*  node affinity are 2 types
+
+  ####   prefered during scheduling
+
+* 
+  
+
+*    
+
+####   ignoreduring scheduling
+
+* pod has already been scheduled a perticuler node and is running & only after that u updated or remove the node label ,  it will be ignoreed and the will be running on the same node
+* 
+
 ![hema](./images/affinity-complete-k8s.png)
 
 ![hema](./images/nodeaffinity-k8s.png)
@@ -1474,15 +1495,9 @@ spec:
         - containerPort: 80
 ```
 
+## pod afffinity
 
-
-
-
-
-
-
-
-
+* pod and node affinity were same , but pod affinity works on only in the name space level , its used to decrease the latency , in case node will be down because of prehaps insufficient resources , k8s place that pods in another nodes is called soft effect , based on weight attribute .
 
 ### TAINT AND TOLERATION
 
