@@ -442,7 +442,9 @@ taint is cannot assigning(con't working) pods in perticular node
  taint is node level
  tolaration is pod level
 
- * kubectl taint nodes <node-name> <key>=<value>:<effect>
+ * kubectl taint nodes node-name key=value:effect
+
+ * 
  ```yaml
 # nginx-rolling-update-deployment.yaml
 
