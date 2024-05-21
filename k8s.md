@@ -187,6 +187,144 @@ three types of containers
 release a new version to a subset of users in a precise way (HTTP headers, cookie, weight, etc.). A/B testing is really a technique for making business decisions based on statistics but we will briefly describe the process
 
 
+```yaml
+# nginx-recreate-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-recreate
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+      track: recreate
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nginx
+        track: recreate
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.6  # Specify the desired NGINX version
+        ports:
+        - containerPort: 80
+
+
+
+
+# nginx-canary-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+      track: canary
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: nginx
+        track: canary
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.6  # Specify the desired NGINX version
+        ports:
+        - containerPort: 80
+
+
+# nginx-rolling-update-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-rolling-update
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      track: rolling-update
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+        track: rolling-update
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.6  # Specify the desired NGINX version
+        ports:
+        - containerPort: 80
+
+
+
+# nginx-blue-green-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-blue-green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+      track: blue-green
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: nginx
+        track: blue-green
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.6  # Specify the desired NGINX version
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-blue-green-svc
+spec:
+  selector:
+    app: nginx
+    track: blue-green
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+
+
+```
+
+
 ### (6) roolback and rool out: 
 anycomplexities on new version pod takes old version  is called roolback
 new versiom is called roolout
@@ -303,6 +441,44 @@ taint is cannot assigning(con't working) pods in perticular node
 
  taint is node level
  tolaration is pod level
+
+ * kubectl taint nodes <node-name> <key>=<value>:<effect>
+ ```yaml
+# nginx-rolling-update-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-rolling-update
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      track: rolling-update
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+        track: rolling-update
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.19.6  # Specify the desired NGINX version
+        ports:
+        - containerPort: 80
+      tolerations:
+      - key: "node-role"
+        operator: "Equal"
+        value: "worker"
+        effect: "NoSchedule"
+
+```
 
  #### noshedule: 
  already executed pods will be running . but new pods can't attached
