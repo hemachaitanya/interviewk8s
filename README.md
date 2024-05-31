@@ -141,7 +141,29 @@ kubectl create networkpolicy hema --pod-selector=app=frontend --policy-types=ing
 * --prune=false:
         Automatically delete resource objects, that do not appear in the configs and are created
         by either apply or create --save-config. Should be used with either -l or --all.
-* 
+
+
+
+
+
+## what is the defference between the deployment and headless service 
+
+* in deployment pods will be crated parllel 
+* in statefulset pods will be created both parellel and sequential order 
+
+* in deployment we delete pods in sequential
+
+* in stateful set pods will be deleted LIFO ordr
+
+### voumes 
+
+#### RWO : 
+ 
+ * ONLY IN ONE MACHINE WE  read , write in one pod
+
+ #### rwonce :
+
+ * one read , write pod will be created 
 
 
 

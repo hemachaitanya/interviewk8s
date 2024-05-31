@@ -22,6 +22,8 @@ kube-api server exposes functionality over HTTP(s) protocol and provides REST AP
 ### etcd:
 * This is memory of k8s cluster(etcd is stateful means all the information in k8s stored in local)
 
+![hema](./images/dns-for-pods%20communication.png)
+
 ### sheduler:
 * Scheduler is responsible for creating k8s objects and scheduling them on right node
 
