@@ -1640,11 +1640,24 @@ spec:
 
 * Identity and Security Management
 
+### 4 types of security types to maintain the k8s cluster security
+
+  1. RBAC
+  2. ABAC
+  3. 3A SCURITY
+  4. 
+
 * Kubernetes RBAC: AKS supports native K8s RBAC
 
 * Azure AD: AKS can be configured with Azure AD
 
 * Integrated Logging and monitoring
+
+![hema](./images/3A%20scurity.png)
+
+![referhere](https://medium.com/@mrdevsecops/kubernetes-rbac-role-based-access-control-c825c50fbe38)
+
+
 
 * Container insights feature in Azure Monitor can be addon to the AKS cluster
 Azure Monitor managed service for Prometheus
