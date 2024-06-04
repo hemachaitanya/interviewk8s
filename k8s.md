@@ -1837,10 +1837,17 @@ spec:
 
 ### 4 types of security types to maintain the k8s cluster security
 
+![hema](./images/all-k8s-security.png)
+
+* rbac is global but abac is regional
+
+* ABAC is updated Version of RBAC
+
   1. RBAC
   2. ABAC
   3. 3A SCURITY
-  4. 
+  4. risk BAC
+  5. ruBAC
 
 * Kubernetes RBAC: AKS supports native K8s RBAC
 
