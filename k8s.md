@@ -1857,7 +1857,8 @@ spec:
 
 ![hema](./images/3A%20scurity.png)
 
-![referhere](https://medium.com/@mrdevsecops/kubernetes-rbac-role-based-access-control-c825c50fbe38)
+
+[referhere](https://medium.com/@mrdevsecops/kubernetes-rbac-role-based-access-control-c825c50fbe38)
 
 
 
