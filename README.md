@@ -1,16 +1,124 @@
 # interviewk8s commands 
 
+* kubectl get pod/pod-name deployment/deployment-name job/jobname ...... resource-type/resource-name
+
+* kubectl apply -f one.yaml -f two.yaml -f...n.yaml
+
+* kubectl create ns namespace-name
+
+* kubectl config set-context --current --namespace=<namespace-name>
+
+* kubectl api-resources
+
+* kubectl get pods -o json | jq -r '.items[] | .metadata.name as $pod | .spec.containers[] | "\($pod): \(.name)"'
+
+### i want to check the inside pod container names for each pod
+* create list-containers.sh
+
+```
+for pod in $(kubectl get pods -o jsonpath='{.items[*].metadata.name}'); do
+  echo "Pod: $pod"
+  kubectl get pod $pod -o jsonpath='{.spec.containers[*].name}' | tr ' ' '\n'
+done
+```
+* chmod +x list-containers.sh
+
+* ./list-containers.sh
+
+* (cluster name) kubectl config current-context
+
+* (cluster yaml) kubectl config view
+
+* kubectl exec -it hema -- mkdir -p /ram/application
+
+* verify this path will be created or not 
+
+* kubectl exec -it hema -- ls -d /ram/application
+
+* kubectl completion bash
+*
+* kubectl 
+* kubectl cp (source-file)  pod-name:(destination-path)
+
+* kubectl cp pod.yaml hema:/ram/application
+
+
+```yaml
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata: 
+  clusterName: kubernetes-admin@kubernetes
+  name: hema
+  namespace: defalut
+  labels:
+    app: caddy
+    auther: hemachaitanya
+spec:
+  minReadySeconds: 5
+  replicas: 2
+  selector: 
+    matchExpressions:
+      - key: app
+        operator: in
+        values:
+          - web
+            application
+            db
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 30%
+      maxUnavailable: 30%
+  template:
+    metadata:
+      clusterName: kubernetes-admin@kubernetes
+      name: hemalatha
+      labels: 
+        app: web
+        app: application
+    spec:
+      containers: 
+        - name: container
+          image: caddy
+          tty: true
+          ports:
+            - name: hema
+              containerPort: 80
+              protocol: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hema-svc
+spec:
+  selector:
+    app: web
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+
+    
+
+
+ 
+
+
+```
+
+
 ## create
 
-kubectl create job jobname --image=httpd
+* kubectl create job jobname --image=httpd
 
-kubectl create deploy deployname --image=nginx
+* kubectl create deploy deployname --image=nginx
 
-kubectl create cronjob time --image=caddy --schedule="30 1 * * 0"
+* kubectl create cronjob time --image=caddy --schedule="30 1 * * 0"
 
-kubectl create secret generic my-secret --from-file=/etc/passwd
+* kubectl create secret generic my-secret --from-file=/etc/passwd
 
-kubectl create networkpolicy hema --pod-selector=app=frontend --policy-types=ingress --ingress.from.pod-selector=app=backend --ingress.ports.protocol=TCP --ingress.ports.port=80
+* kubectl create networkpolicy hema --pod-selector=app=frontend --policy-types=ingress --ingress.from.pod-selector=app=backend --ingress.ports.protocol=TCP --ingress.ports.port=80
 
 * kubectl create --help
 
