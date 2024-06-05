@@ -36,8 +36,9 @@ done
 * kubectl exec -it hema -- ls -d /ram/application
 
 * kubectl completion bash
-*
-* kubectl 
+
+* kubectl convert -f filename --dry-run
+
 * kubectl cp (source-file)  pod-name:(destination-path)
 
 * kubectl cp pod.yaml hema:/ram/application
