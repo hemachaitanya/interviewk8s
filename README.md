@@ -1,5 +1,38 @@
 # interviewk8s commands 
 
+### namespace level
+
+Resource	Cluster-Level	Namespace-Level
+Pods		Yes
+Services		Yes
+Deployments		Yes
+StatefulSets		Yes
+ReplicaSets		Yes
+ConfigMaps		Yes
+Secrets		Yes
+Ingresses		Yes
+PersistentVolumeClaims		Yes
+NetworkPolicies		Yes
+ResourceQuotas		Yes
+LimitRanges		Yes
+
+### cluster level
+
+Roles		Yes
+RoleBindings		Yes
+Namespaces	Yes	
+Nodes	Yes	
+PersistentVolumes	Yes	
+ClusterRoles	Yes	
+ClusterRoleBindings	Yes	
+StorageClasses	Yes	
+CustomResourceDefinitions	Yes	
+APIService	Yes	
+ClusterIssuers (cert-manager)	Yes	
+PodSecurityPolicies	Yes	
+ValidatingWebhookConfigurations	Yes	
+MutatingWebhookConfigurations	Yes	
+
 * kubectl get pod/pod-name deployment/deployment-name job/jobname ...... resource-type/resource-name
 
 * kubectl apply -f one.yaml -f two.yaml -f...n.yaml
