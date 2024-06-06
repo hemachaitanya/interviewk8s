@@ -15,12 +15,13 @@ Ingresses		,
 PersistentVolumeClaims		,
 NetworkPolicies		,
 ResourceQuotas		,
+Roles		,
+RoleBindings		,
 LimitRanges		.
 
 ### cluster level
 
-Roles		,
-RoleBindings		,
+
 Namespaces	,	
 Nodes	,	
 PersistentVolumes	,	
