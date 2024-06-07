@@ -1,3 +1,40 @@
+
+
+### namespace level
+
+
+
+Pods		,
+Services		,
+Deployments		,
+StatefulSets		,
+ReplicaSets		,
+ConfigMaps		,
+Secrets		,
+Ingresses		,
+PersistentVolumeClaims		,
+NetworkPolicies		,
+ResourceQuotas		,
+Roles		,
+RoleBindings		,
+LimitRanges		.
+
+### cluster level
+
+
+Namespaces	,	
+Nodes	,	
+PersistentVolumes	,	
+ClusterRoles	,	
+ClusterRoleBindings	,
+StorageClasses	,	
+CustomResourceDefinitions,	Yes	
+APIService	,	
+ClusterIssuers (cert-manager),
+PodSecurityPolicies	,	
+ValidatingWebhookConfigurations	,	
+MutatingWebhookConfigurations	.	
+
 # interviewk8s commands 
 
 * kubectl get pod/pod-name deployment/deployment-name job/jobname ...... resource-type/resource-name
