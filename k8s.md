@@ -1,3 +1,10 @@
+## most iportent formulas and k8s notes 
+
+[main components](https://medium.com/spacelift/26-top-kubernetes-tools-for-2024-6809b2f0d5d4)
+
+[k8s formulas each component wise](https://spacelift.io/blog/kubernetes-cheat-sheet)
+
+[stateful and stateless headless](https://spacelift.io/blog/statefulset-vs-deployment)
 
 ### Kubernetes (K8s)
 
