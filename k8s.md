@@ -1586,7 +1586,7 @@ curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISE
 
   * kubectl get po -owide
 
-  * kubectl exec -it <pod-name> -- /bin/sh
+  * kubectl exec -it pod-name -- /bin/sh
 
   * create kube-api server using below script or commands
 
