@@ -1,5 +1,7 @@
 ## most iportent formulas and k8s notes 
 
+[networking](https://ammarsuhail155.medium.com/kubernetes-networking-798c06b2a3ca)
+
 [main components](https://medium.com/spacelift/26-top-kubernetes-tools-for-2024-6809b2f0d5d4)
 
 [k8s formulas each component wise](https://spacelift.io/blog/kubernetes-cheat-sheet)
