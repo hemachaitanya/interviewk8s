@@ -81,7 +81,7 @@ communication.
 
 ### container orchistration
 
-#### quoram:
+#### quoram: k8s cluster follows quoram mechanisum to create no. of cotrleplane nodes creation
    
 
    the minimum number of memebers in assembly or society 
@@ -97,6 +97,8 @@ kube-api server exposes functionality over HTTP(s) protocol and provides REST AP
 
 ### etcd:
 * This is memory of k8s cluster(etcd is stateful means all the information in k8s stored in local)
+
+![heam](./images/etcd-backup.png)
 
 ![hema](./images/dns-for-pods%20communication.png)
 
