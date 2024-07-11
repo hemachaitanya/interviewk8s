@@ -1,5 +1,7 @@
 ## most iportent formulas and k8s notes 
 
+[networking](https://ammarsuhail155.medium.com/kubernetes-networking-798c06b2a3ca)
+
 [main components](https://medium.com/spacelift/26-top-kubernetes-tools-for-2024-6809b2f0d5d4)
 
 [k8s formulas each component wise](https://spacelift.io/blog/kubernetes-cheat-sheet)
@@ -1137,7 +1139,60 @@ subjects:
 
 ### pod to pod communicaion with in same node but different namespaces 
 
- * 
+ * kubectl create namespace one
+
+ * kubectl create namespace two
+
+ * create a pod in each name spaces
+
+   ```yaml
+   # pod1.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  namespace: namespace1
+spec:
+  containers:
+  - name: container1
+    image: nginx
+    ports:
+    - containerPort: 80
+```
+
+* kubectl apply -f pod1.yaml
+
+* crate another pod in namespace two
+
+```yaml
+
+# pod2.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod2
+  namespace: namespace2
+spec:
+  containers:
+  - name: container2
+    image: nginx
+    ports:
+    - containerPort: 80
+```
+* kubectl apply -f pod2.yaml
+
+* kubectl get pods -n one
+
+* kubectl get pods -n two
+
+* kubectl exec -it pod1 -n one --/bin/bash
+
+* curl pod2.namespace2.svc.cluster.local
+
+*  The DNS name for a pod in a different namespace follows the format podname.namespace.svc.cluster.local
+
+*  If Network Policies are being used, you might need to adjust them to allow traffic between the namespaces.
+
 
 ### pod to pod communication within the different nodes
 
@@ -1606,7 +1661,7 @@ curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" -X GET ${APISE
 
   * kubectl get po -owide
 
-  * kubectl exec -it <pod-name> -- /bin/sh
+  * kubectl exec -it pod-name -- /bin/sh
 
   * create kube-api server using below script or commands
 
@@ -1864,9 +1919,9 @@ spec:
 
 *  incase two applications are running in multi tanent cluster , with three differant namespaces .
 
-* kubectl -n <1-namespace> exec <in-1-ns-podname> --curl <pod ip>
+* kubectl -n 1-namespace exec in-1-ns-podname --curl <pod ip>
 
-* kubectl describe namespace <namespace-name>
+* kubectl describe namespace namespace-name
 
 * kubectl config view --minify --output 'jsonpath={..namespace}'
 
