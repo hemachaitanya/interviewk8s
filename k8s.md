@@ -417,6 +417,8 @@ spec:
     kubectl set image deployment/nginx-blue-green nginx=httpd --record
 
     kubectl annotate deployment/nginx-blue-green kubernetes.io/change-cause="Updated image to caddy"
+
+![image](./images/cause.png)
     
     kubectl rollout history deployment/nginx-blue-green --revision=2
     
