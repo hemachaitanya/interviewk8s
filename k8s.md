@@ -400,6 +400,26 @@ spec:
 
 ```
 
+    kubectl get deployment
+
+    kubectl describe deployment/<deployment-name>
+
+    kubectl set image deployment/<deployment-name> <container-name>:<new-imagename>:<version>
+
+![image](./images/cause-non.png)
+
+    kubectl rollout history deployment/<deployment-name>
+
+    kubectl scale deployment/<deployment-name> --replicas=4
+
+    kubectl set image deployment/nginx-blue-green nginx=httpd --record
+
+    kubectl annotate deployment/nginx-blue-green kubernetes.io/change-cause="Updated image to caddy"
+    
+    kubectl rollout history deployment/nginx-blue-green --revision=2
+    
+    
+
 
 ### (6) roolback and rool out: 
 anycomplexities on new version pod takes old version  is called roolback
