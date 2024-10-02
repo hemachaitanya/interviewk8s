@@ -58,6 +58,25 @@ for pod in $(kubectl get pods -o jsonpath='{.items[*].metadata.name}'); do
   kubectl get pod $pod -o jsonpath='{.spec.containers[*].name}' | tr ' ' '\n'
 done
 ```
+#!/bin/bash
+
+# Get all pod names in the current namespace (or specify a namespace with -n <namespace>)
+pods=$(kubectl get pods -o jsonpath='{.items[*].metadata.name}')
+
+# Loop through each pod and get its container names
+for pod in $pods; do
+    echo "Pod: $pod"
+    containers=$(kubectl get pod $pod -o jsonpath='{.spec.containers[*].name}')
+    
+    # Print each container name inside the pod
+    for container in $containers; do
+        echo "  Container: $container"
+    done
+done
+```
+### container names in pod
+'''container.sh
+
 * chmod +x list-containers.sh
 
 * ./list-containers.sh
