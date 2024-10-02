@@ -76,6 +76,32 @@ for pod in $pods; do
     done
 done
 ```
+```all namespaces.sh
+#!/bin/bash
+
+# Get all pod names in all namespaces (or specify a namespace with -n <namespace> if needed)
+pods=$(kubectl get pods --all-namespaces -o jsonpath='{.items[*].metadata.name}')
+namespaces=$(kubectl get pods --all-namespaces -o jsonpath='{.items[*].metadata.namespace}')
+
+# Combine pod names and their namespaces into arrays
+pod_array=($pods)
+namespace_array=($namespaces)
+
+# Loop through each pod and get its container names
+for i in "${!pod_array[@]}"; do
+    pod=${pod_array[$i]}
+    namespace=${namespace_array[$i]}
+    echo "Pod: $pod (Namespace: $namespace)"
+    
+    # Get the container names in the pod
+    containers=$(kubectl get pod $pod -n $namespace -o jsonpath='{.spec.containers[*].name}')
+    
+    # Print each container name inside the pod
+    for container in $containers; do
+        echo "  Container: $container"
+    done
+done
+```
 
 
 * chmod +x list-containers.sh
