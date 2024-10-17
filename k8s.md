@@ -401,12 +401,12 @@ spec:
       targetPort: 80
 
 
-
 ```
+[link reprasents types of deployment](https://directdevops.blog/2020/12/11/application-deployment-strategies/)
 
     kubectl get deployment
 
-    kubectl describe deployment/<deployment-name>
+    kubectl describe deployment/deployment-name
 
     kubectl set image deployment/<deployment-name> <container-name>:<new-imagename>:<version>
 
