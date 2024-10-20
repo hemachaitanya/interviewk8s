@@ -8,6 +8,50 @@
 
 [stateful and stateless headless](https://spacelift.io/blog/statefulset-vs-deployment)
 
+
+### KUBERNETES COMMANDS
+
+* kubectl ciuster-info
+
+* kubectl get pods -o=wide
+
+* kubectl get pods --field-selector=status.phase=Running
+
+* kubectl create deployment name-of-deployment --image=caddy --replicas=3
+
+* kubectl get deployment/deployment-name -o jsonpath='{.spec.template.spec.containers[*].Name}'
+
+* kubectl set image deployment/deployment-name containername=new-iamge:version
+
+* kubectl rollout history/status/undo deployment/deployment-name
+
+* kubectl create namespace namesapace-name
+
+* kubectl config set-context --current --namespace=name-of-namespace
+
+* kubectl config view -o jsonpath='{.users[*].name}'
+
+* kubectl create/edit daemonset/daemon-name
+
+* kubectl get events --field-selector type!=Normal
+
+* kubectl get events --field-selector involvedObject.kind!=Pod
+
+* kubectl logs podname -c containername
+
+* kubectl logs podname --since=1hour
+
+* kubectl logs pod-name --tail=15
+
+* kubectl get pods -o=wide | grep node-name
+
+* kubectl get nodes --show-labels -o=wide
+
+* kubectl annotate(or)label  node node-name key=value
+
+* kubectl label pod pod-name key=value
+
+
 ### Kubernetes (K8s)
 
  is an open source system to deploy, scale, and manage containerized applications anywhere
