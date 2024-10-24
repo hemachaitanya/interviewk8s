@@ -511,6 +511,37 @@ pods assigned to the nodes by using sheduler its checks spu,memory,ram ...... so
     * To get all the api-resources in your k8s cluster (kubectl api-resources)
 
 ### helm (old version tinnel)
+
+![helm](./images/helm-nana1.png)
+
+![hema](./images/helm2.png)
+
+![hema](./images/helm3.png)
+
+![hema](./images/helm4.png)
+
+![hema](./images/helm5.png)
+
+![hema](./images/helm6.png)
+
+
+![hema](./images/helm7.png)
+
+![hema](./images/helm8.png)
+
+![hema](./images/helm9.png)
+
+![hema](./images/helm10.png)
+
+![hema](./images/helm11.png)
+
+![hema](./images/helm12.png)
+
+![hema](./images/helm13.png)
+
+![hema](./images/helm14.png)
+
+
     disadv: basically 
     *  helm is a package manager for k8s (like apt is package manager for ununtu)
 
@@ -645,6 +676,35 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
  development it was in pending state (not created)
 
 * ### service:
+
+![hema](./images/svc-1.png)
+
+![hema](./images/svc-2.png)
+
+![hema](./images/svc-3.png)
+
+![hema](./images/svc-4.png)
+
+![hema](./images/svc-5.png)
+
+![ema](./images/svc-6.png)
+
+![hema](./images/svc-7.png)
+
+
+![hema](./images/ingress-svc.png)
+
+![hema](./images/ingress-svc%201.png)
+
+![hema](./images/ingress-svc2.png)
+
+![hema](./images/ingress-svc3.png)
+
+![hema](./images/ingress-svc4.png)
+
+![hema](./images/ingress-svc5.png)
+
+
 * services are two types 
 (1)internal service : cluster ip
 (2)external service : node port , load balancer
