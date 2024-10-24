@@ -615,6 +615,30 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
 
  ### stateful set: 
 
+ ![hema](./images/stateful1.png)
+
+ ![heam](./images/stateful2png.png)
+
+ ![hema](./images/stateful3.png)
+
+ ![heam](./images/stateful-4.png)
+
+ ![hema](./images/stateful-5.png)
+
+ ![hema](./images/stateful-6.png)
+
+ ![hema](./images/stateful-7.png)
+
+ ![hema](./images/stateufl-8.png)
+
+ ![hema](./images/stateful-9.png)
+
+ ![hema](./images/stateful-10.png)
+
+ ![hema](./images/stateful-11.png)
+
+
+
  Statefulset is like deployment with replicas. But each pod gets its own volume.
  When we create replicas in Stateful Set we get predictable names
   We can access individual pod, by creating headless service and by using ...svc.cluster.local
@@ -628,6 +652,44 @@ When we have tried to create a pod with nodeSelector matching purpose: poc it wa
  load balancer send traffic into the  differend pods wich one have less traffic deals
 
  ### volumes
+
+
+ ![hema](./images/pv-1.png)
+
+ 
+ ![hema](./images/pv-2.png)
+
+ 
+ ![hema](./images/pv-3.png)
+
+ 
+ ![hema](./images/pv-4.png)
+
+ 
+ ![hema](./images/pv-5.png)
+
+ 
+ ![hema](./images/pv-6.png)
+
+ 
+ ![hema](./images/pv-8.png)
+
+ 
+ ![hema](./images/pv-9.png)
+
+
+ 
+ ![hema](./images/pv-10.png)
+
+
+ 
+ ![hema](./images/pv-1.png)
+
+ 
+ ![hema](./images/pv-11.png)
+
+ 
+ ![hema](./images/pv-13.png)
 
  Volume represents a named volume in a pod that may be accessed by any container in the pod.
 
